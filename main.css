@@ -1,0 +1,346 @@
+/**
+ * DANTE ALIGHIERI - Main JavaScript
+ * Controller principale del sito
+ */
+
+document.addEventListener('DOMContentLoaded', () => {
+    initLoader();
+    initHeader();
+    initHeroStars();
+    initNavigation();
+    initPanels();
+    initScrollEffects();
+    initMobileMenu();
+});
+
+/* ============================================
+   LOADER
+   ============================================ */
+function initLoader() {
+    const loader = document.getElementById('loader');
+    
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            loader.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }, 3000);
+    });
+    
+    // Fallback se il caricamento è troppo lungo
+    setTimeout(() => {
+        loader.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }, 5000);
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+function initHeader() {
+    const header = document.getElementById('header');
+    let lastScroll = 0;
+    
+    window.addEventListener('scroll', () => {
+        const currentScroll = window.pageYOffset;
+        
+        if (currentScroll > 100) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+        
+        lastScroll = currentScroll;
+    });
+    
+    // Logo click - torna all'inizio
+    const logo = document.getElementById('logoHome');
+    if (logo) {
+        logo.addEventListener('click', (e) => {
+            e.preventDefault();
+            closeAllSections();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+}
+
+/* ============================================
+   HERO STARS
+   ============================================ */
+function initHeroStars() {
+    const starsContainer = document.getElementById('heroStars');
+    if (!starsContainer) return;
+    
+    const starCount = 150;
+    
+    for (let i = 0; i < starCount; i++) {
+        const star = document.createElement('div');
+        star.className = 'star';
+        
+        const size = Math.random() * 3 + 1;
+        star.style.width = `${size}px`;
+        star.style.height = `${size}px`;
+        star.style.left = `${Math.random() * 100}%`;
+        star.style.top = `${Math.random() * 100}%`;
+        star.style.setProperty('--duration', `${Math.random() * 4 + 2}s`);
+        star.style.setProperty('--delay', `${Math.random() * 3}s`);
+        
+        starsContainer.appendChild(star);
+    }
+}
+
+/* ============================================
+   NAVIGATION
+   ============================================ */
+function initNavigation() {
+    const navLinks = document.querySelectorAll('.nav-link');
+    
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = link.getAttribute('href').substring(1);
+            const target = document.getElementById(targetId);
+            
+            if (target) {
+                closeAllSections();
+                target.scrollIntoView({ behavior: 'smooth' });
+            }
+            
+            // Chiudi menu mobile se aperto
+            const mobileNav = document.getElementById('navLinks');
+            if (mobileNav.classList.contains('open')) {
+                mobileNav.classList.remove('open');
+            }
+        });
+    });
+    
+    // Hero CTA
+    const heroCta = document.getElementById('heroCta');
+    if (heroCta) {
+        heroCta.addEventListener('click', () => {
+            const sections = document.getElementById('sections');
+            if (sections) {
+                sections.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    }
+    
+    // Hero scroll indicator
+    const heroScroll = document.getElementById('heroScroll');
+    if (heroScroll) {
+        heroScroll.addEventListener('click', () => {
+            const sections = document.getElementById('sections');
+            if (sections) {
+                sections.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    }
+}
+
+/* ============================================
+   PANELS
+   ============================================ */
+function initPanels() {
+    const panels = document.querySelectorAll('.panel');
+    const panelCtas = document.querySelectorAll('.panel-cta');
+    
+    // Click sui pannelli
+    panels.forEach(panel => {
+        panel.addEventListener('click', (e) => {
+            if (!e.target.classList.contains('panel-cta')) {
+                const section = panel.dataset.section;
+                openSection(section);
+            }
+        });
+        
+        // Keyboard accessibility
+        panel.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                const section = panel.dataset.section;
+                openSection(section);
+            }
+        });
+    });
+    
+    // Click sui bottoni CTA
+    panelCtas.forEach(cta => {
+        cta.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const section = cta.dataset.target;
+            openSection(section);
+        });
+    });
+    
+    // Bottoni back
+    const backButtons = document.querySelectorAll('.section-back-btn');
+    backButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            closeAllSections();
+        });
+    });
+    
+    // Close button
+    const closeBtn = document.getElementById('sectionCloseBtn');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeAllSections);
+    }
+}
+
+/* ============================================
+   SECTION MANAGEMENT
+   ============================================ */
+function openSection(sectionName) {
+    const sectionMap = {
+        'biografia': 'biografiaSection',
+        'opere': 'opereSection',
+        'commedia': 'commediaSection'
+    };
+    
+    const sectionId = sectionMap[sectionName];
+    if (!sectionId) return;
+    
+    const section = document.getElementById(sectionId);
+    if (!section) return;
+    
+    // Nascondi main wrapper
+    const mainWrapper = document.getElementById('mainWrapper');
+    if (mainWrapper) {
+        mainWrapper.style.display = 'none';
+    }
+    
+    // Mostra sezione
+    section.classList.add('active');
+    
+    // Mostra close button
+    const closeBtn = document.getElementById('sectionCloseBtn');
+    if (closeBtn) {
+        closeBtn.classList.add('visible');
+    }
+    
+    // Carica contenuto
+    loadSectionContent(sectionName);
+    
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    // Update URL
+    history.pushState({ section: sectionName }, '', `#${sectionName}`);
+}
+
+function closeAllSections() {
+    const sections = document.querySelectorAll('.content-section');
+    sections.forEach(section => {
+        section.classList.remove('active');
+    });
+    
+    const mainWrapper = document.getElementById('mainWrapper');
+    if (mainWrapper) {
+        mainWrapper.style.display = 'block';
+    }
+    
+    const closeBtn = document.getElementById('sectionCloseBtn');
+    if (closeBtn) {
+        closeBtn.classList.remove('visible');
+    }
+    
+    // Update URL
+    history.pushState({}, '', window.location.pathname);
+}
+
+function loadSectionContent(sectionName) {
+    switch(sectionName) {
+        case 'biografia':
+            if (typeof loadBiografia === 'function') {
+                loadBiografia();
+            }
+            break;
+        case 'opere':
+            if (typeof loadOpere === 'function') {
+                loadOpere();
+            }
+            break;
+        case 'commedia':
+            if (typeof loadCommedia === 'function') {
+                loadCommedia();
+            }
+            break;
+    }
+}
+
+// Handle browser back/forward
+window.addEventListener('popstate', (e) => {
+    if (e.state && e.state.section) {
+        openSection(e.state.section);
+    } else {
+        closeAllSections();
+    }
+});
+
+// Handle direct URL access
+window.addEventListener('load', () => {
+    const hash = window.location.hash.substring(1);
+    if (hash && ['biografia', 'opere', 'commedia'].includes(hash)) {
+        setTimeout(() => openSection(hash), 3500); // After loader
+    }
+});
+
+/* ============================================
+   SCROLL EFFECTS
+   ============================================ */
+function initScrollEffects() {
+    const heroScroll = document.getElementById('heroScroll');
+    
+    window.addEventListener('scroll', () => {
+        const scrollY = window.pageYOffset;
+        
+        // Nascondi scroll indicator
+        if (heroScroll) {
+            if (scrollY > 100) {
+                heroScroll.classList.add('hidden');
+            } else {
+                heroScroll.classList.remove('hidden');
+            }
+        }
+    });
+}
+
+/* ============================================
+   MOBILE MENU
+   ============================================ */
+function initMobileMenu() {
+    const menuBtn = document.getElementById('mobileMenuBtn');
+    const navLinks = document.getElementById('navLinks');
+    
+    if (menuBtn && navLinks) {
+        menuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('open');
+            menuBtn.classList.toggle('active');
+        });
+    }
+}
+
+/* ============================================
+   UTILITY FUNCTIONS
+   ============================================ */
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+function throttle(func, limit) {
+    let inThrottle;
+    return function(...args) {
+        if (!inThrottle) {
+            func.apply(this, args);
+            inThrottle = true;
+            setTimeout(() => inThrottle = false, limit);
+        }
+    };
+}
