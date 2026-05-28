@@ -1,0 +1,977 @@
+/**
+ * DANTE ALIGHIERI - Sezioni Contenuto
+ * Stili per Biografia, Opere e Commedia
+ */
+
+/* ============================================
+   TIMELINE - BIOGRAFIA
+   ============================================ */
+.biography-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem 6rem;
+    position: relative;
+    z-index: 10;
+}
+
+.timeline {
+    position: relative;
+    padding: 2rem 0;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(
+        to bottom,
+        transparent,
+        var(--gold) 5%,
+        var(--gold) 95%,
+        transparent
+    );
+    transform: translateX(-50%);
+}
+
+.timeline-era {
+    margin-bottom: 4rem;
+}
+
+.era-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    position: relative;
+}
+
+.era-badge {
+    display: inline-block;
+    padding: 1rem 3rem;
+    background: linear-gradient(135deg, rgba(201, 162, 39, 0.2) 0%, rgba(201, 162, 39, 0.05) 100%);
+    border: 1px solid var(--gold);
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    color: var(--gold);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+}
+
+.era-title {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    color: var(--parchment);
+    margin-top: 1.5rem;
+    letter-spacing: 0.1em;
+}
+
+.timeline-event {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin-bottom: 3rem;
+    position: relative;
+}
+
+.timeline-event:nth-child(odd) {
+    flex-direction: row;
+}
+
+.timeline-event:nth-child(even) {
+    flex-direction: row-reverse;
+}
+
+.event-date {
+    flex: 0 0 200px;
+    text-align: center;
+    padding: 0 2rem;
+}
+
+.date-year {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    color: var(--gold);
+    line-height: 1;
+    display: block;
+}
+
+.date-period {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--parchment);
+    opacity: 0.7;
+    margin-top: 0.5rem;
+}
+
+.event-marker {
+    flex: 0 0 60px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 0.5rem;
+}
+
+.marker-dot {
+    width: 20px;
+    height: 20px;
+    background: var(--ink);
+    border: 3px solid var(--gold);
+    border-radius: 50%;
+    position: relative;
+    z-index: 10;
+    transition: all 0.4s;
+}
+
+.timeline-event:hover .marker-dot {
+    background: var(--gold);
+    box-shadow: 0 0 30px rgba(201, 162, 39, 0.6);
+    transform: scale(1.2);
+}
+
+.marker-dot::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    background: var(--gold);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.4s;
+}
+
+.timeline-event:hover .marker-dot::before {
+    opacity: 1;
+}
+
+.event-content {
+    flex: 0 0 calc(50% - 130px);
+    max-width: 500px;
+    padding: 2rem;
+    background: linear-gradient(135deg, rgba(26, 26, 26, 0.95) 0%, rgba(13, 13, 13, 0.98) 100%);
+    border: 1px solid rgba(201, 162, 39, 0.2);
+    border-radius: 8px;
+    transition: all 0.5s var(--transition-cinematic);
+}
+
+.timeline-event:hover .event-content {
+    border-color: var(--gold);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    transform: translateY(-5px);
+}
+
+.event-title {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    color: var(--parchment);
+    margin-bottom: 1rem;
+    letter-spacing: 0.05em;
+}
+
+.event-description {
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--parchment);
+    opacity: 0.9;
+}
+
+.event-quote {
+    margin-top: 1.5rem;
+    padding: 1rem 1.5rem;
+    background: rgba(201, 162, 39, 0.1);
+    border-left: 3px solid var(--gold);
+    font-family: var(--font-text);
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--gold);
+}
+
+.event-source {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    opacity: 0.7;
+    font-style: normal;
+}
+
+/* ============================================
+   OPERE MINORI
+   ============================================ */
+.opere-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem 6rem;
+    position: relative;
+    z-index: 10;
+}
+
+.opere-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 3rem;
+}
+
+.opera-card {
+    background: linear-gradient(135deg, rgba(26, 26, 26, 0.95) 0%, rgba(13, 13, 13, 0.98) 100%);
+    border: 1px solid rgba(201, 162, 39, 0.2);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.5s var(--transition-cinematic);
+}
+
+.opera-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-10px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.opera-header {
+    padding: 2.5rem;
+    background: linear-gradient(135deg, rgba(201, 162, 39, 0.15) 0%, transparent 100%);
+    border-bottom: 1px solid rgba(201, 162, 39, 0.2);
+}
+
+.opera-icon {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 1.5rem;
+}
+
+.opera-icon svg {
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke: var(--gold);
+    stroke-width: 1.5;
+}
+
+.opera-title {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    color: var(--parchment);
+    margin-bottom: 0.5rem;
+}
+
+.opera-subtitle {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--gold);
+    font-style: italic;
+    opacity: 0.8;
+}
+
+.opera-meta {
+    display: flex;
+    gap: 2rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(201, 162, 39, 0.1);
+}
+
+.meta-item {
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    color: var(--parchment);
+    opacity: 0.6;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+}
+
+.meta-item span {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--gold);
+    margin-top: 0.3rem;
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+.opera-body {
+    padding: 2.5rem;
+}
+
+.opera-tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid rgba(201, 162, 39, 0.2);
+    padding-bottom: 1rem;
+}
+
+.opera-tab {
+    padding: 0.8rem 1.5rem;
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--parchment);
+    opacity: 0.6;
+    background: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.opera-tab:hover {
+    opacity: 1;
+    color: var(--gold);
+}
+
+.opera-tab.active {
+    opacity: 1;
+    color: var(--gold);
+    border-color: var(--gold);
+    background: rgba(201, 162, 39, 0.1);
+}
+
+.opera-tab-content {
+    display: none;
+}
+
+.opera-tab-content.active {
+    display: block;
+    animation: fadeIn 0.4s ease-out;
+}
+
+.opera-text {
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    line-height: 1.9;
+    color: var(--parchment);
+    opacity: 0.9;
+}
+
+.opera-text p {
+    margin-bottom: 1.5rem;
+}
+
+.opera-themes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+}
+
+.theme-tag {
+    padding: 0.5rem 1.2rem;
+    background: rgba(201, 162, 39, 0.1);
+    border: 1px solid rgba(201, 162, 39, 0.3);
+    border-radius: 20px;
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.opera-characters {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.character-item {
+    padding: 1.5rem;
+    background: rgba(26, 26, 26, 0.5);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 8px 8px 0;
+}
+
+.character-name {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+}
+
+.character-role {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--parchment);
+    opacity: 0.8;
+}
+
+/* ============================================
+   DIVINA COMMEDIA
+   ============================================ */
+.commedia-container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 2rem 6rem;
+    position: relative;
+    z-index: 10;
+}
+
+.cantica-nav {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 4rem;
+    flex-wrap: wrap;
+}
+
+.cantica-btn {
+    padding: 1.5rem 4rem;
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    border: 2px solid;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.5s var(--transition-cinematic);
+    position: relative;
+    overflow: hidden;
+}
+
+.cantica-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    transition: left 0.5s;
+}
+
+.cantica-btn:hover::before {
+    left: 0;
+}
+
+.cantica-btn.inferno {
+    color: var(--inferno);
+    border-color: var(--inferno);
+}
+
+.cantica-btn.inferno::before {
+    background: linear-gradient(90deg, var(--inferno-deep), var(--inferno));
+}
+
+.cantica-btn.inferno:hover,
+.cantica-btn.inferno.active {
+    color: var(--parchment);
+    background: var(--inferno);
+    box-shadow: 0 0 40px rgba(139, 0, 0, 0.5);
+}
+
+.cantica-btn.purgatorio {
+    color: var(--purgatorio);
+    border-color: var(--purgatorio);
+}
+
+.cantica-btn.purgatorio::before {
+    background: linear-gradient(90deg, var(--purgatorio-deep), var(--purgatorio));
+}
+
+.cantica-btn.purgatorio:hover,
+.cantica-btn.purgatorio.active {
+    color: var(--ink);
+    background: var(--purgatorio);
+    box-shadow: 0 0 40px rgba(218, 165, 32, 0.5);
+}
+
+.cantica-btn.paradiso {
+    color: var(--paradiso);
+    border-color: var(--paradiso);
+}
+
+.cantica-btn.paradiso::before {
+    background: linear-gradient(90deg, var(--paradiso-deep), var(--paradiso));
+}
+
+.cantica-btn.paradiso:hover,
+.cantica-btn.paradiso.active {
+    color: var(--parchment);
+    background: var(--paradiso);
+    box-shadow: 0 0 40px rgba(30, 144, 255, 0.5);
+}
+
+.cantica-section {
+    display: none;
+}
+
+.cantica-section.active {
+    display: block;
+    animation: fadeIn 0.6s ease-out;
+}
+
+.cantica-intro {
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto 4rem;
+    padding: 3rem;
+    background: linear-gradient(135deg, rgba(26, 26, 26, 0.9) 0%, rgba(13, 13, 13, 0.95) 100%);
+    border: 1px solid rgba(201, 162, 39, 0.2);
+    border-radius: 12px;
+}
+
+.cantica-intro.inferno {
+    border-color: rgba(139, 0, 0, 0.4);
+    background: linear-gradient(135deg, rgba(61, 0, 0, 0.3) 0%, rgba(13, 13, 13, 0.95) 100%);
+}
+
+.cantica-intro.purgatorio {
+    border-color: rgba(218, 165, 32, 0.4);
+    background: linear-gradient(135deg, rgba(107, 78, 10, 0.2) 0%, rgba(13, 13, 13, 0.95) 100%);
+}
+
+.cantica-intro.paradiso {
+    border-color: rgba(30, 144, 255, 0.4);
+    background: linear-gradient(135deg, rgba(10, 40, 85, 0.3) 0%, rgba(13, 13, 13, 0.95) 100%);
+}
+
+.cantica-title {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.cantica-title.inferno {
+    color: var(--inferno);
+    text-shadow: 0 0 40px rgba(139, 0, 0, 0.5);
+}
+
+.cantica-title.purgatorio {
+    color: var(--purgatorio);
+    text-shadow: 0 0 40px rgba(218, 165, 32, 0.5);
+}
+
+.cantica-title.paradiso {
+    color: var(--paradiso);
+    text-shadow: 0 0 40px rgba(30, 144, 255, 0.5);
+}
+
+.cantica-description {
+    font-family: var(--font-body);
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: var(--parchment);
+    opacity: 0.9;
+}
+
+.cantica-stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(201, 162, 39, 0.2);
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    color: var(--gold);
+    display: block;
+}
+
+.stat-label {
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    color: var(--parchment);
+    opacity: 0.6;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+
+/* Canti Grid */
+.canti-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 4rem;
+}
+
+.canto-card {
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, rgba(26, 26, 26, 0.9) 0%, rgba(13, 13, 13, 0.95) 100%);
+    border: 1px solid rgba(201, 162, 39, 0.2);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.4s var(--transition-cinematic);
+    text-decoration: none;
+}
+
+.canto-card.inferno:hover {
+    border-color: var(--inferno);
+    background: linear-gradient(135deg, rgba(139, 0, 0, 0.3) 0%, rgba(13, 13, 13, 0.95) 100%);
+    box-shadow: 0 10px 40px rgba(139, 0, 0, 0.3);
+    transform: translateY(-5px);
+}
+
+.canto-card.purgatorio:hover {
+    border-color: var(--purgatorio);
+    background: linear-gradient(135deg, rgba(218, 165, 32, 0.2) 0%, rgba(13, 13, 13, 0.95) 100%);
+    box-shadow: 0 10px 40px rgba(218, 165, 32, 0.3);
+    transform: translateY(-5px);
+}
+
+.canto-card.paradiso:hover {
+    border-color: var(--paradiso);
+    background: linear-gradient(135deg, rgba(30, 144, 255, 0.2) 0%, rgba(13, 13, 13, 0.95) 100%);
+    box-shadow: 0 10px 40px rgba(30, 144, 255, 0.3);
+    transform: translateY(-5px);
+}
+
+.canto-number {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+}
+
+.canto-roman {
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    color: var(--parchment);
+    opacity: 0.5;
+    letter-spacing: 0.2em;
+}
+
+.canto-title-preview {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    color: var(--parchment);
+    opacity: 0.7;
+    text-align: center;
+    padding: 0 1rem;
+    margin-top: 0.5rem;
+}
+
+/* Canto Detail View */
+.canto-detail {
+    display: none;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.canto-detail.active {
+    display: block;
+    animation: fadeIn 0.6s ease-out;
+}
+
+.canto-detail-header {
+    text-align: center;
+    padding: 3rem;
+    margin-bottom: 3rem;
+    background: linear-gradient(135deg, rgba(26, 26, 26, 0.95) 0%, rgba(13, 13, 13, 0.98) 100%);
+    border: 1px solid rgba(201, 162, 39, 0.2);
+    border-radius: 12px;
+}
+
+.canto-detail-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.canto-nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1.5rem;
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    background: rgba(26, 26, 26, 0.8);
+    border: 1px solid rgba(201, 162, 39, 0.3);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.canto-nav-btn:hover {
+    background: rgba(201, 162, 39, 0.2);
+    border-color: var(--gold);
+}
+
+.canto-nav-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.canto-back-to-list {
+    padding: 0.8rem 2rem;
+}
+
+.canto-detail-title {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    color: var(--parchment);
+    margin-bottom: 0.5rem;
+}
+
+.canto-detail-subtitle {
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    color: var(--gold);
+    font-style: italic;
+    opacity: 0.8;
+}
+
+.canto-content-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin: 3rem 0 2rem;
+    flex-wrap: wrap;
+}
+
+.content-tab {
+    padding: 1rem 2rem;
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--parchment);
+    opacity: 0.6;
+    background: rgba(26, 26, 26, 0.8);
+    border: 1px solid rgba(201, 162, 39, 0.2);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.content-tab:hover {
+    opacity: 1;
+    border-color: var(--gold);
+}
+
+.content-tab.active {
+    opacity: 1;
+    color: var(--gold);
+    border-color: var(--gold);
+    background: rgba(201, 162, 39, 0.15);
+}
+
+.canto-content-panel {
+    display: none;
+    padding: 3rem;
+    background: linear-gradient(135deg, rgba(26, 26, 26, 0.95) 0%, rgba(13, 13, 13, 0.98) 100%);
+    border: 1px solid rgba(201, 162, 39, 0.2);
+    border-radius: 12px;
+}
+
+.canto-content-panel.active {
+    display: block;
+    animation: fadeIn 0.4s ease-out;
+}
+
+/* Text with Parafrasi */
+.text-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+}
+
+.text-column {
+    padding: 2rem;
+    background: rgba(13, 13, 13, 0.5);
+    border-radius: 8px;
+}
+
+.text-column-header {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(201, 162, 39, 0.2);
+}
+
+.original-text {
+    font-family: var(--font-text);
+    font-size: 1.15rem;
+    line-height: 2;
+    color: var(--parchment);
+}
+
+.terzina {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    border-radius: 4px;
+    transition: background 0.3s;
+    cursor: pointer;
+}
+
+.terzina:hover {
+    background: rgba(201, 162, 39, 0.1);
+}
+
+.terzina.selected {
+    background: rgba(201, 162, 39, 0.15);
+    border-left: 3px solid var(--gold);
+}
+
+.verse {
+    display: block;
+    margin-bottom: 0.3rem;
+}
+
+.verse-number {
+    display: inline-block;
+    width: 30px;
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    color: var(--gold);
+    opacity: 0.5;
+}
+
+.parafrasi-text {
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    line-height: 1.9;
+    color: var(--parchment);
+    opacity: 0.9;
+}
+
+.parafrasi-block {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: rgba(26, 26, 26, 0.5);
+    border-radius: 4px;
+    border-left: 3px solid transparent;
+    transition: all 0.3s;
+}
+
+.parafrasi-block.highlighted {
+    border-left-color: var(--gold);
+    background: rgba(201, 162, 39, 0.1);
+}
+
+/* Riassunto */
+.riassunto-container {
+    font-family: var(--font-body);
+    font-size: 1.15rem;
+    line-height: 1.9;
+    color: var(--parchment);
+}
+
+.riassunto-container p {
+    margin-bottom: 1.5rem;
+    text-align: justify;
+}
+
+.riassunto-container h3 {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    color: var(--gold);
+    margin: 2.5rem 0 1rem;
+    letter-spacing: 0.1em;
+}
+
+.riassunto-highlight {
+    padding: 2rem;
+    margin: 2rem 0;
+    background: rgba(201, 162, 39, 0.1);
+    border-left: 4px solid var(--gold);
+    border-radius: 0 8px 8px 0;
+}
+
+.riassunto-highlight p {
+    margin-bottom: 0;
+    font-style: italic;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 1024px) {
+    .timeline::before {
+        left: 30px;
+    }
+    
+    .timeline-event,
+    .timeline-event:nth-child(odd),
+    .timeline-event:nth-child(even) {
+        flex-direction: column;
+        align-items: flex-start;
+        padding-left: 70px;
+    }
+    
+    .event-date {
+        flex: none;
+        text-align: left;
+        padding: 0;
+        margin-bottom: 1rem;
+    }
+    
+    .event-marker {
+        position: absolute;
+        left: 20px;
+        top: 0;
+    }
+    
+    .event-content {
+        flex: none;
+        max-width: 100%;
+    }
+    
+    .text-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .cantica-btn {
+        padding: 1rem 2rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .biography-container,
+    .opere-container,
+    .commedia-container {
+        padding: 0 1rem 4rem;
+    }
+    
+    .opere-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .canti-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 1rem;
+    }
+    
+    .cantica-nav {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .cantica-btn {
+        width: 100%;
+        max-width: 300px;
+    }
+    
+    .cantica-stats {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    .canto-content-tabs {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .content-tab {
+        width: 100%;
+        max-width: 300px;
+        text-align: center;
+    }
+}
