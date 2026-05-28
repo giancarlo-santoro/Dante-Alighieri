@@ -1,0 +1,2491 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dante Alighieri | Il Sommo Poeta</title>
+    <link href="[fonts.googleapis.com](https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap)" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --inferno: #8B0000;
+            --inferno-deep: #4A0000;
+            --inferno-glow: #FF4500;
+            --purgatorio: #DAA520;
+            --purgatorio-deep: #8B6914;
+            --purgatorio-glow: #FFD700;
+            --paradiso: #1E90FF;
+            --paradiso-deep: #0A3D6E;
+            --paradiso-glow: #87CEEB;
+            --gold: #C9A227;
+            --gold-light: #E8D5A3;
+            --parchment: #F5E6C8;
+            --ink: #1A1A1A;
+            --ink-light: #333333;
+            --font-display: 'Cinzel', serif;
+            --font-body: 'Cormorant Garamond', serif;
+            --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--ink);
+            color: var(--parchment);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* LOADER */
+        .loader {
+            position: fixed;
+            inset: 0;
+            background: var(--ink);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: opacity 0.8s var(--transition-smooth), visibility 0.8s var(--transition-smooth);
+        }
+
+        .loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .loader-content {
+            text-align: center;
+        }
+
+        .loader-symbol {
+            width: 120px;
+            height: 120px;
+            position: relative;
+            margin: 0 auto 2rem;
+        }
+
+        .loader-ring {
+            position: absolute;
+            inset: 0;
+            border: 3px solid transparent;
+            border-radius: 50%;
+            animation: loaderSpin 2s linear infinite;
+        }
+
+        .loader-ring:nth-child(1) {
+            border-top-color: var(--inferno);
+        }
+
+        .loader-ring:nth-child(2) {
+            inset: 15px;
+            border-right-color: var(--purgatorio);
+            animation-delay: 0.15s;
+            animation-direction: reverse;
+        }
+
+        .loader-ring:nth-child(3) {
+            inset: 30px;
+            border-bottom-color: var(--paradiso);
+            animation-delay: 0.3s;
+        }
+
+        @keyframes loaderSpin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loader-text {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            letter-spacing: 0.3em;
+            color: var(--gold);
+            animation: loaderPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes loaderPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* HEADER */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(to bottom, rgba(26, 26, 26, 0.95) 0%, rgba(26, 26, 26, 0) 100%);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all 0.4s var(--transition-smooth);
+        }
+
+        .header.scrolled {
+            padding: 1rem 3rem;
+            background: rgba(26, 26, 26, 0.98);
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--gold);
+            text-decoration: none;
+            letter-spacing: 0.1em;
+            position: relative;
+        }
+
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--inferno), var(--purgatorio), var(--paradiso));
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s var(--transition-smooth);
+        }
+
+        .logo:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-link {
+            font-family: var(--font-display);
+            font-size: 0.9rem;
+            color: var(--parchment);
+            text-decoration: none;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            position: relative;
+            padding: 0.5rem 0;
+            transition: color 0.3s var(--transition-smooth);
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 6px;
+            height: 6px;
+            background: var(--gold);
+            border-radius: 50%;
+            transform: translateX(-50%) scale(0);
+            transition: transform 0.3s var(--transition-bounce);
+        }
+
+        .nav-link:hover {
+            color: var(--gold);
+        }
+
+        .nav-link:hover::before {
+            transform: translateX(-50%) scale(1);
+        }
+
+        /* HERO */
+        .hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: radial-gradient(ellipse at center, var(--ink-light) 0%, var(--ink) 70%);
+        }
+
+        .hero-particles {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--gold);
+            border-radius: 50%;
+            opacity: 0;
+            animation: particleFloat 8s infinite;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                opacity: 0;
+                transform: translateY(100vh) scale(0);
+            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% {
+                opacity: 0;
+                transform: translateY(-100vh) scale(1);
+            }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            max-width: 900px;
+            padding: 2rem;
+        }
+
+        .hero-ornament {
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin: 0 auto 2rem;
+            position: relative;
+        }
+
+        .hero-ornament::before,
+        .hero-ornament::after {
+            content: '◆';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gold);
+            font-size: 0.6rem;
+        }
+
+        .hero-ornament::before { left: -20px; }
+        .hero-ornament::after { right: -20px; }
+
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 10vw, 7rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--parchment) 0%, var(--gold) 50%, var(--parchment) 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 4s linear infinite;
+        }
+
+        @keyframes shimmer {
+            to { background-position: 200% center; }
+        }
+
+        .hero-subtitle {
+            font-family: var(--font-display);
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            color: var(--gold);
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .hero-quote {
+            font-family: var(--font-body);
+            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+            font-style: italic;
+            color: var(--parchment);
+            opacity: 0.8;
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            line-height: 1.6;
+        }
+
+        .hero-scroll {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gold);
+            font-family: var(--font-display);
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            animation: scrollBounce 2s ease-in-out infinite;
+        }
+
+        @keyframes scrollBounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(10px); }
+        }
+
+        .scroll-icon {
+            width: 24px;
+            height: 40px;
+            border: 2px solid var(--gold);
+            border-radius: 12px;
+            position: relative;
+        }
+
+        .scroll-icon::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 8px;
+            background: var(--gold);
+            border-radius: 2px;
+            animation: scrollDot 1.5s ease-in-out infinite;
+        }
+
+        @keyframes scrollDot {
+            0%, 100% { opacity: 1; top: 8px; }
+            50% { opacity: 0.3; top: 20px; }
+        }
+
+        /* MAIN SECTIONS */
+        .main-sections {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+            position: relative;
+        }
+
+        .sections-title {
+            text-align: center;
+            padding: 6rem 2rem 4rem;
+            background: var(--ink);
+        }
+
+        .sections-title h2 {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            color: var(--parchment);
+            margin-bottom: 1rem;
+        }
+
+        .sections-title p {
+            font-size: 1.2rem;
+            color: var(--gold);
+            opacity: 0.8;
+        }
+
+        .panels-container {
+            display: flex;
+            flex: 1;
+            min-height: 80vh;
+        }
+
+        .panel {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: flex 0.7s var(--transition-smooth);
+        }
+
+        .panel:hover {
+            flex: 1.5;
+        }
+
+        .panel-bg {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.7s var(--transition-smooth), filter 0.5s var(--transition-smooth);
+            filter: brightness(0.4) saturate(0.8);
+        }
+
+        .panel:hover .panel-bg {
+            transform: scale(1.1);
+            filter: brightness(0.6) saturate(1);
+        }
+
+        .panel-biografia .panel-bg {
+            background: linear-gradient(135deg, rgba(138, 109, 59, 0.9) 0%, rgba(26, 26, 26, 0.95) 100%);
+        }
+
+        .panel-biografia::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(201, 162, 39, 0.1) 0%, rgba(26, 26, 26, 0.9) 100%);
+            z-index: 1;
+        }
+
+        .panel-opere .panel-bg {
+            background: linear-gradient(135deg, rgba(75, 0, 75, 0.9) 0%, rgba(26, 26, 26, 0.95) 100%);
+        }
+
+        .panel-opere::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(218, 165, 32, 0.1) 0%, rgba(26, 26, 26, 0.9) 100%);
+            z-index: 1;
+        }
+
+        .panel-commedia .panel-bg {
+            background: linear-gradient(180deg, var(--inferno-deep) 0%, var(--purgatorio-deep) 50%, var(--paradiso-deep) 100%);
+            animation: cosmicShift 10s ease-in-out infinite;
+        }
+
+        @keyframes cosmicShift {
+            0%, 100% {
+                background: linear-gradient(180deg, var(--inferno-deep) 0%, var(--purgatorio-deep) 50%, var(--paradiso-deep) 100%);
+            }
+            33% {
+                background: linear-gradient(180deg, var(--purgatorio-deep) 0%, var(--paradiso-deep) 50%, var(--inferno-deep) 100%);
+            }
+            66% {
+                background: linear-gradient(180deg, var(--paradiso-deep) 0%, var(--inferno-deep) 50%, var(--purgatorio-deep) 100%);
+            }
+        }
+
+        .panel-commedia::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 30% 20%, rgba(255, 69, 0, 0.2) 0%, transparent 30%),
+                radial-gradient(circle at 70% 50%, rgba(255, 215, 0, 0.2) 0%, transparent 30%),
+                radial-gradient(circle at 50% 80%, rgba(135, 206, 235, 0.2) 0%, transparent 30%);
+            z-index: 1;
+            animation: orbGlow 5s ease-in-out infinite;
+        }
+
+        @keyframes orbGlow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .panel-content {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem;
+            z-index: 10;
+            text-align: center;
+        }
+
+        .panel-icon {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 2rem;
+        }
+
+        .panel-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: none;
+            stroke: var(--gold);
+            stroke-width: 1.5;
+            transition: all 0.5s var(--transition-smooth);
+        }
+
+        .panel:hover .panel-icon svg {
+            stroke: var(--parchment);
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 20px var(--gold));
+        }
+
+        .panel-number {
+            font-family: var(--font-display);
+            font-size: 0.9rem;
+            color: var(--gold);
+            letter-spacing: 0.3em;
+            margin-bottom: 1rem;
+            opacity: 0.7;
+        }
+
+        .panel-title {
+            font-family: var(--font-display);
+            font-size: clamp(1.8rem, 4vw, 3rem);
+            font-weight: 700;
+            color: var(--parchment);
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+            transition: all 0.5s var(--transition-smooth);
+        }
+
+        .panel:hover .panel-title {
+            transform: translateY(-5px);
+            text-shadow: 0 5px 30px rgba(201, 162, 39, 0.5);
+        }
+
+        .panel-description {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--parchment);
+            opacity: 0;
+            max-width: 400px;
+            transform: translateY(20px);
+            transition: all 0.5s var(--transition-smooth) 0.1s;
+        }
+
+        .panel:hover .panel-description {
+            opacity: 0.9;
+            transform: translateY(0);
+        }
+
+        .panel-cta {
+            margin-top: 2rem;
+            padding: 1rem 2.5rem;
+            font-family: var(--font-display);
+            font-size: 0.9rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--ink);
+            background: var(--gold);
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s var(--transition-smooth) 0.2s;
+        }
+
+        .panel:hover .panel-cta {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .panel-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s var(--transition-smooth);
+        }
+
+        .panel-cta:hover::before {
+            left: 100%;
+        }
+
+        .panel-cta:hover {
+            background: var(--parchment);
+            box-shadow: 0 10px 40px rgba(201, 162, 39, 0.4);
+        }
+
+        .panel::after {
+            content: '';
+            position: absolute;
+            top: 10%;
+            right: 0;
+            height: 80%;
+            width: 1px;
+            background: linear-gradient(to bottom, transparent 0%, var(--gold) 20%, var(--gold) 80%, transparent 100%);
+            opacity: 0.3;
+            z-index: 20;
+        }
+
+        .panel:last-child::after {
+            display: none;
+        }
+
+        /* QUOTE SECTION */
+        .quote-section {
+            position: relative;
+            padding: 10rem 2rem;
+            background: var(--ink);
+            overflow: hidden;
+        }
+
+        .quote-section::before {
+            content: '"';
+            position: absolute;
+            top: 2rem;
+            left: 5%;
+            font-family: var(--font-display);
+            font-size: 30rem;
+            color: var(--gold);
+            opacity: 0.03;
+            line-height: 1;
+        }
+
+        .quote-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .quote-text {
+            font-family: var(--font-body);
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-style: italic;
+            line-height: 1.8;
+            color: var(--parchment);
+            margin-bottom: 2rem;
+        }
+
+        .quote-author {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            color: var(--gold);
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+        }
+
+        .quote-source {
+            font-family: var(--font-body);
+            font-size: 1rem;
+            color: var(--parchment);
+            opacity: 0.6;
+            margin-top: 0.5rem;
+        }
+
+        /* FOOTER */
+        .footer {
+            background: linear-gradient(to bottom, var(--ink), #0D0D0D);
+            padding: 5rem 2rem 3rem;
+            text-align: center;
+        }
+
+        .footer-ornament {
+            width: 200px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            margin: 0 auto 3rem;
+        }
+
+        .footer-text {
+            font-family: var(--font-display);
+            font-size: 0.9rem;
+            color: var(--parchment);
+            opacity: 0.6;
+            letter-spacing: 0.2em;
+        }
+
+        .footer-date {
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            color: var(--gold);
+            margin-top: 1rem;
+            opacity: 0.5;
+        }
+
+        /* REVEAL ANIMATION */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s var(--transition-smooth), transform 0.8s var(--transition-smooth);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* BIOGRAFIA SECTION */
+        .biografia-section {
+            position: relative;
+            background: var(--ink);
+            padding: 0;
+            overflow: hidden;
+            display: none;
+        }
+
+        .biografia-section.open {
+            display: block;
+        }
+
+        /* BIO CLOSE BUTTON */
+        .bio-close-btn {
+            position: fixed;
+            top: 100px;
+            right: 30px;
+            z-index: 1001;
+            width: 50px;
+            height: 50px;
+            background: rgba(26, 26, 26, 0.9);
+            border: 2px solid var(--gold);
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s var(--transition-smooth);
+        }
+
+        .bio-close-btn.visible {
+            display: flex;
+        }
+
+        .bio-close-btn:hover {
+            background: var(--gold);
+            transform: scale(1.1);
+        }
+
+        .bio-close-btn::before,
+        .bio-close-btn::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 2px;
+            background: var(--gold);
+            transition: background 0.3s ease;
+        }
+
+        .bio-close-btn:hover::before,
+        .bio-close-btn:hover::after {
+            background: var(--ink);
+        }
+
+        .bio-close-btn::before {
+            transform: rotate(45deg);
+        }
+
+        .bio-close-btn::after {
+            transform: rotate(-45deg);
+        }
+
+        /* BIO COSMOS */
+        .bio-cosmos {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bio-stars {
+            position: absolute;
+            inset: 0;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, var(--gold), transparent),
+                radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+                radial-gradient(1px 1px at 90px 40px, var(--gold-light), transparent),
+                radial-gradient(2px 2px at 130px 80px, rgba(255,255,255,0.6), transparent),
+                radial-gradient(1px 1px at 160px 120px, var(--gold), transparent);
+            background-size: 200px 200px;
+            animation: starFloat 100s linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes starFloat {
+            from { transform: translateY(0); }
+            to { transform: translateY(-200px); }
+        }
+
+        .bio-nebula {
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(139, 0, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(30, 144, 255, 0.08) 0%, transparent 40%),
+                radial-gradient(ellipse at 60% 80%, rgba(218, 165, 32, 0.1) 0%, transparent 45%);
+            animation: nebulaShift 30s ease-in-out infinite alternate;
+        }
+
+        @keyframes nebulaShift {
+            0% { opacity: 0.5; transform: scale(1); }
+            100% { opacity: 0.8; transform: scale(1.1); }
+        }
+
+        /* BIO HEADER */
+        .bio-header {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 8rem 2rem 4rem;
+        }
+
+        .bio-header-ornament {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            font-family: var(--font-display);
+            font-size: 0.9rem;
+            color: var(--gold);
+            letter-spacing: 0.3em;
+        }
+
+        .ornament-center {
+            padding: 0.5rem 1.5rem;
+            border: 1px solid var(--gold);
+            border-radius: 2px;
+        }
+
+        .bio-main-title {
+            margin-bottom: 1.5rem;
+        }
+
+        .title-line {
+            display: block;
+            font-family: var(--font-body);
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            font-weight: 400;
+            color: var(--parchment);
+            opacity: 0.8;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .title-name {
+            display: block;
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--parchment) 0%, var(--gold) 50%, var(--parchment) 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 5s linear infinite;
+        }
+
+        .bio-subtitle {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            color: var(--gold);
+            letter-spacing: 0.15em;
+            opacity: 0.7;
+        }
+
+        /* TIMELINE */
+        .timeline-container {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem 8rem;
+            z-index: 10;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, transparent 0%, var(--gold) 5%, var(--gold) 95%, transparent 100%);
+            opacity: 0.3;
+            transform: translateX(-50%);
+        }
+
+        .timeline-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 0%;
+            background: linear-gradient(to bottom, var(--inferno), var(--purgatorio), var(--paradiso));
+            transition: height 0.3s ease-out;
+        }
+
+        .timeline-event {
+            position: relative;
+            margin-bottom: 6rem;
+            display: flex;
+            align-items: flex-start;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s var(--transition-smooth), transform 0.8s var(--transition-smooth);
+        }
+
+        .timeline-event.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .timeline-event:nth-child(odd) {
+            flex-direction: row;
+            padding-right: calc(50% + 3rem);
+        }
+
+        .timeline-event:nth-child(even) {
+            flex-direction: row-reverse;
+            padding-left: calc(50% + 3rem);
+        }
+
+        .event-marker {
+            position: absolute;
+            left: 50%;
+            top: 2rem;
+            transform: translateX(-50%);
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .marker-ring {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--gold);
+            border-radius: 50%;
+            position: relative;
+            background: var(--ink);
+            transition: all 0.4s var(--transition-smooth);
+        }
+
+        .marker-ring::before {
+            content: '';
+            position: absolute;
+            inset: 4px;
+            border: 1px solid var(--gold);
+            border-radius: 50%;
+            opacity: 0.5;
+        }
+
+        .marker-dot {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 12px;
+            height: 12px;
+            background: var(--gold);
+            border-radius: 50%;
+            box-shadow: 0 0 20px var(--gold);
+            animation: markerPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes markerPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            50% { transform: translate(-50%, -50%) scale(1.3); opacity: 0.7; }
+        }
+
+        .marker-year {
+            margin-top: 0.8rem;
+            font-family: var(--font-display);
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--gold);
+            letter-spacing: 0.1em;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+        }
+
+        .marker-dark .marker-ring { border-color: #666; }
+        .marker-dark .marker-dot { background: #888; box-shadow: 0 0 15px rgba(136,136,136,0.5); }
+
+        .marker-danger .marker-ring { border-color: var(--inferno); }
+        .marker-danger .marker-dot { background: var(--inferno); box-shadow: 0 0 20px var(--inferno); }
+
+        .marker-divine .marker-ring { border-color: var(--paradiso); box-shadow: 0 0 30px rgba(30, 144, 255, 0.3); }
+        .marker-divine .marker-dot { background: linear-gradient(135deg, var(--inferno), var(--purgatorio), var(--paradiso)); box-shadow: 0 0 25px var(--purgatorio); }
+
+        .marker-final .marker-ring { border-color: var(--parchment); }
+        .marker-final .marker-dot { background: var(--parchment); box-shadow: 0 0 20px rgba(245, 230, 200, 0.5); }
+
+        /* EVENT CARD */
+        .event-card {
+            background: linear-gradient(135deg, rgba(40, 35, 30, 0.95) 0%, rgba(26, 26, 26, 0.98) 100%);
+            border: 1px solid rgba(201, 162, 39, 0.2);
+            border-radius: 4px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s var(--transition-smooth);
+        }
+
+        .event-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold), transparent);
+        }
+
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 40px rgba(201, 162, 39, 0.1);
+            border-color: rgba(201, 162, 39, 0.4);
+        }
+
+        .event-card.featured::before {
+            background: linear-gradient(90deg, var(--inferno), var(--purgatorio), var(--paradiso));
+        }
+
+        .event-card.mourning {
+            background: linear-gradient(135deg, rgba(30, 30, 35, 0.95) 0%, rgba(20, 20, 25, 0.98) 100%);
+        }
+
+        .event-card.mourning::before {
+            background: linear-gradient(90deg, #444, transparent);
+        }
+
+        .event-card.exile::before {
+            background: linear-gradient(90deg, var(--inferno), var(--inferno-deep));
+        }
+
+        .event-card.masterpiece {
+            background: linear-gradient(135deg, rgba(40, 30, 50, 0.95) 0%, rgba(26, 26, 36, 0.98) 100%);
+        }
+
+        .event-card.masterpiece::before {
+            background: linear-gradient(90deg, var(--inferno), var(--purgatorio), var(--paradiso));
+            height: 4px;
+        }
+
+        .event-card.final {
+            background: linear-gradient(135deg, rgba(35, 35, 45, 0.95) 0%, rgba(25, 25, 35, 0.98) 100%);
+        }
+
+        .event-card.final::before {
+            background: linear-gradient(90deg, var(--parchment), transparent);
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 1.5rem;
+            color: var(--gold);
+        }
+
+        .card-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .heart-icon .heart-pulse {
+            animation: heartBeat 1.5s ease-in-out infinite;
+        }
+
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.3); }
+            35% { transform: scale(1); }
+            45% { transform: scale(1.2); }
+        }
+
+        .commedia-icon svg {
+            animation: slowRotate 20s linear infinite;
+        }
+
+        @keyframes slowRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .card-content {
+            flex: 1;
+        }
+
+        .card-period {
+            display: inline-block;
+            font-family: var(--font-display);
+            font-size: 0.8rem;
+            color: var(--gold);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 0.8rem;
+            padding: 0.3rem 0.8rem;
+            border: 1px solid rgba(201, 162, 39, 0.3);
+            border-radius: 2px;
+        }
+
+        .card-title {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 600;
+            color: var(--parchment);
+            margin-bottom: 1.5rem;
+            line-height: 1.3;
+        }
+
+        .card-text {
+            margin-bottom: 1.5rem;
+        }
+
+        .card-text p {
+            font-family: var(--font-body);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--parchment);
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+
+        .card-text p:last-child {
+            margin-bottom: 0;
+        }
+
+        .card-text strong {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .card-text em {
+            font-style: italic;
+            color: var(--gold-light);
+        }
+
+        .card-quote {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(201, 162, 39, 0.05);
+            border-left: 3px solid var(--gold);
+            border-radius: 0 4px 4px 0;
+        }
+
+        .card-quote blockquote {
+            font-family: var(--font-body);
+            font-size: 1.15rem;
+            font-style: italic;
+            line-height: 1.7;
+            color: var(--parchment);
+            margin-bottom: 0.8rem;
+        }
+
+        .card-quote cite {
+            font-family: var(--font-display);
+            font-size: 0.85rem;
+            color: var(--gold);
+            letter-spacing: 0.1em;
+            opacity: 0.8;
+        }
+
+        .card-details {
+            margin-top: 2rem;
+            display: grid;
+            gap: 1rem;
+        }
+
+        .detail-item {
+            display: flex;
+            gap: 1rem;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(201, 162, 39, 0.1);
+        }
+
+        .detail-label {
+            font-family: var(--font-display);
+            font-size: 0.85rem;
+            color: var(--gold);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            min-width: 120px;
+        }
+
+        .detail-value {
+            font-family: var(--font-body);
+            font-size: 1rem;
+            color: var(--parchment);
+            opacity: 0.9;
+        }
+
+        .card-map {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(139, 0, 0, 0.1);
+            border-radius: 4px;
+            border: 1px solid rgba(139, 0, 0, 0.2);
+        }
+
+        .map-title {
+            font-family: var(--font-display);
+            font-size: 0.9rem;
+            color: var(--inferno);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .map-locations {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .location {
+            font-family: var(--font-body);
+            font-size: 1rem;
+            color: var(--parchment);
+            padding: 0.4rem 0.8rem;
+            background: rgba(139, 0, 0, 0.2);
+            border-radius: 2px;
+        }
+
+        .location-arrow {
+            color: var(--gold);
+            opacity: 0.5;
+        }
+
+        .card-structure {
+            margin-top: 2rem;
+            padding: 2rem;
+            background: rgba(30, 30, 40, 0.5);
+            border-radius: 4px;
+            border: 1px solid rgba(201, 162, 39, 0.15);
+        }
+
+        .structure-title {
+            font-family: var(--font-display);
+            font-size: 0.9rem;
+            color: var(--gold);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .structure-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .structure-item {
+            text-align: center;
+            padding: 1.5rem 1rem;
+            border-radius: 4px;
+            transition: transform 0.3s ease;
+        }
+
+        .structure-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .structure-item.inferno {
+            background: linear-gradient(135deg, rgba(139, 0, 0, 0.3), rgba(139, 0, 0, 0.1));
+            border: 1px solid rgba(139, 0, 0, 0.4);
+        }
+
+        .structure-item.purgatorio {
+            background: linear-gradient(135deg, rgba(218, 165, 32, 0.3), rgba(218, 165, 32, 0.1));
+            border: 1px solid rgba(218, 165, 32, 0.4);
+        }
+
+        .structure-item.paradiso {
+            background: linear-gradient(135deg, rgba(30, 144, 255, 0.3), rgba(30, 144, 255, 0.1));
+            border: 1px solid rgba(30, 144, 255, 0.4);
+        }
+
+        .structure-name {
+            display: block;
+            font-family: var(--font-display);
+            font-size: 0.85rem;
+            letter-spacing: 0.15em;
+            margin-bottom: 0.8rem;
+        }
+
+        .structure-item.inferno .structure-name { color: var(--inferno-glow); }
+        .structure-item.purgatorio .structure-name { color: var(--purgatorio-glow); }
+        .structure-item.paradiso .structure-name { color: var(--paradiso-glow); }
+
+        .structure-canti,
+        .structure-versi {
+            display: block;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            color: var(--parchment);
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        .structure-total {
+            text-align: center;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            color: var(--parchment);
+            padding-top: 1rem;
+            border-top: 1px solid rgba(201, 162, 39, 0.2);
+        }
+
+        .structure-total strong {
+            color: var(--gold);
+        }
+
+        .card-epitaph {
+            margin-top: 2rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(60, 55, 50, 0.5), rgba(40, 35, 30, 0.8));
+            border-radius: 4px;
+            border: 1px solid rgba(201, 162, 39, 0.2);
+            text-align: center;
+        }
+
+        .epitaph-text {
+            margin-bottom: 1rem;
+        }
+
+        .epitaph-latin {
+            font-family: var(--font-body);
+            font-size: 1rem;
+            font-style: italic;
+            color: var(--gold-light);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(201, 162, 39, 0.2);
+        }
+
+        .epitaph-translation {
+            font-family: var(--font-body);
+            font-size: 1.05rem;
+            color: var(--parchment);
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+
+        .card-epitaph cite {
+            font-family: var(--font-display);
+            font-size: 0.8rem;
+            color: var(--gold);
+            letter-spacing: 0.1em;
+            opacity: 0.7;
+        }
+
+        .card-image {
+            margin-top: 2rem;
+        }
+
+        .image-frame {
+            position: relative;
+            padding: 0.5rem;
+            background: linear-gradient(135deg, var(--gold), rgba(201, 162, 39, 0.3));
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .image-content {
+            width: 100%;
+            height: 200px;
+            background: var(--ink-light);
+            border-radius: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .image-content::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, hsla(var(--img-hue, 45deg), 30%, 20%, 0.8) 0%, hsla(var(--img-hue, 45deg), 40%, 10%, 0.9) 100%);
+        }
+
+        .image-content::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 30% 40%, hsla(var(--img-hue, 45deg), 50%, 50%, 0.2) 0%, transparent 50%);
+        }
+
+        .firenze-antica::after {
+            background: linear-gradient(transparent 60%, rgba(0,0,0,0.5) 100%), repeating-linear-gradient(90deg, transparent, transparent 30px, rgba(201, 162, 39, 0.05) 30px, rgba(201, 162, 39, 0.05) 60px);
+        }
+
+        .beatrice-incontro::after {
+            background: radial-gradient(circle at 50% 30%, rgba(255, 200, 200, 0.15) 0%, transparent 40%), radial-gradient(circle at 70% 60%, rgba(255, 215, 0, 0.1) 0%, transparent 30%);
+        }
+
+        .tomba-dante::after {
+            background: linear-gradient(transparent 40%, rgba(0,0,0,0.6) 100%), radial-gradient(circle at 50% 70%, rgba(201, 162, 39, 0.15) 0%, transparent 50%);
+        }
+
+        .image-caption {
+            display: block;
+            margin-top: 0.8rem;
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            font-style: italic;
+            color: var(--parchment);
+            opacity: 0.6;
+            text-align: center;
+        }
+
+        /* LEGACY SECTION */
+        .legacy-section {
+            position: relative;
+            z-index: 10;
+            padding: 6rem 2rem 8rem;
+            background: linear-gradient(to bottom, transparent 0%, rgba(201, 162, 39, 0.02) 50%, transparent 100%);
+        }
+
+        .legacy-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .legacy-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3rem);
+            color: var(--parchment);
+            margin-bottom: 1rem;
+        }
+
+        .legacy-subtitle {
+            font-family: var(--font-body);
+            font-size: 1.2rem;
+            color: var(--gold);
+            opacity: 0.8;
+        }
+
+        .legacy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .legacy-card {
+            background: rgba(40, 35, 30, 0.6);
+            border: 1px solid rgba(201, 162, 39, 0.15);
+            border-radius: 4px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.4s var(--transition-smooth);
+        }
+
+        .legacy-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(201, 162, 39, 0.4);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+
+        .legacy-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 1.5rem;
+            color: var(--gold);
+        }
+
+        .legacy-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .legacy-card h4 {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            color: var(--parchment);
+            margin-bottom: 1rem;
+        }
+
+        .legacy-card p {
+            font-family: var(--font-body);
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: var(--parchment);
+            opacity: 0.8;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .panels-container {
+                flex-direction: column;
+            }
+
+            .panel {
+                min-height: 50vh;
+            }
+
+            .panel:hover {
+                flex: 2;
+            }
+
+            .panel::after {
+                top: auto;
+                bottom: 0;
+                left: 10%;
+                right: 10%;
+                width: 80%;
+                height: 1px;
+            }
+
+            .header {
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .timeline-line {
+                left: 30px;
+            }
+
+            .timeline-event {
+                flex-direction: row !important;
+                padding-left: 80px !important;
+                padding-right: 2rem !important;
+            }
+
+            .event-marker {
+                left: 30px;
+            }
+
+            .marker-year {
+                position: absolute;
+                left: 50px;
+                top: 50%;
+                transform: translateY(-50%);
+                margin-top: 0;
+                white-space: nowrap;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 3rem;
+            }
+
+            .hero-subtitle {
+                font-size: 0.9rem;
+                letter-spacing: 0.2em;
+            }
+
+            .panel-content {
+                padding: 2rem;
+            }
+
+            .panel-icon {
+                width: 60px;
+                height: 60px;
+            }
+
+            .quote-section {
+                padding: 5rem 1.5rem;
+            }
+
+            .bio-header {
+                padding: 6rem 1.5rem 3rem;
+            }
+
+            .timeline-container {
+                padding: 2rem 1rem 4rem;
+            }
+
+            .timeline-event {
+                padding-left: 60px !important;
+                margin-bottom: 4rem;
+            }
+
+            .timeline-line {
+                left: 20px;
+            }
+
+            .event-marker {
+                left: 20px;
+            }
+
+            .marker-ring {
+                width: 30px;
+                height: 30px;
+            }
+
+            .marker-dot {
+                width: 8px;
+                height: 8px;
+            }
+
+            .marker-year {
+                left: 40px;
+                font-size: 0.75rem;
+            }
+
+            .event-card {
+                padding: 1.5rem;
+            }
+
+            .card-title {
+                font-size: 1.3rem;
+            }
+
+            .card-text p {
+                font-size: 1rem;
+            }
+
+            .structure-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .legacy-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .bio-close-btn {
+                top: 80px;
+                right: 15px;
+                width: 40px;
+                height: 40px;
+            }
+
+            .bio-close-btn::before,
+            .bio-close-btn::after {
+                width: 16px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        .panel:focus-visible,
+        .nav-link:focus-visible,
+        .logo:focus-visible,
+        .panel-cta:focus-visible,
+        .event-card:focus-visible {
+            outline: 2px solid var(--gold);
+            outline-offset: 4px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loader -->
+    <div class="loader" id="loader">
+        <div class="loader-content">
+            <div class="loader-symbol">
+                <div class="loader-ring"></div>
+                <div class="loader-ring"></div>
+                <div class="loader-ring"></div>
+            </div>
+            <p class="loader-text">XIII-XIV sec.</p>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header" id="header">
+        <a href="#" class="logo">DANTE</a>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="#hero" class="nav-link">Inizio</a></li>
+                <li><a href="#sections" class="nav-link">Opere</a></li>
+                <li><a href="#quote" class="nav-link">Citazione</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Bio Close Button -->
+    <button class="bio-close-btn" id="bioCloseBtn" aria-label="Chiudi biografia"></button>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-particles" id="particles"></div>
+        <div class="hero-content">
+            <div class="hero-ornament"></div>
+            <p class="hero-subtitle">Il Sommo Poeta</p>
+            <h1 class="hero-title">Dante Alighieri</h1>
+            <p class="hero-quote">
+                "Nel mezzo del cammin di nostra vita<br>
+                mi ritrovai per una selva oscura,<br>
+                ché la diritta via era smarrita."
+            </p>
+        </div>
+        <div class="hero-scroll">
+            <div class="scroll-icon"></div>
+            <span>Scopri</span>
+        </div>
+    </section>
+
+    <!-- Main Sections -->
+    <main class="main-sections" id="sections">
+        <div class="sections-title reveal">
+            <h2>Esplora l'Universo Dantesco</h2>
+            <p>Scegli il tuo percorso attraverso l'opera del Poeta</p>
+        </div>
+
+        <div class="panels-container">
+            <!-- Pannello Biografia -->
+            <article class="panel panel-biografia" tabindex="0" role="button" aria-label="Vai alla biografia di Dante">
+                <div class="panel-bg"></div>
+                <div class="panel-content">
+                    <div class="panel-icon">
+                        <svg viewBox="0 0 100 100">
+                            <circle cx="50" cy="30" r="18"/>
+                            <path d="M50 50 C25 55 15 80 15 95 L85 95 C85 80 75 55 50 50"/>
+                            <path d="M30 25 Q50 5 70 25" stroke-dasharray="3,3"/>
+                            <circle cx="50" cy="85" r="5" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <span class="panel-number">I</span>
+                    <h2 class="panel-title">Biografia</h2>
+                    <p class="panel-description">
+                        La vita straordinaria di Durante degli Alighieri: dall'amore per Beatrice 
+                        all'esilio da Firenze, il viaggio umano del più grande poeta italiano.
+                    </p>
+                    <button class="panel-cta" id="openBioBtn">Scopri la Vita</button>
+                </div>
+            </article>
+
+            <!-- Pannello Opere Minori -->
+            <article class="panel panel-opere" tabindex="0" role="button" aria-label="Vai alle opere minori">
+                <div class="panel-bg"></div>
+                <div class="panel-content">
+                    <div class="panel-icon">
+                        <svg viewBox="0 0 100 100">
+                            <rect x="20" y="10" width="60" height="80" rx="3"/>
+                            <line x1="30" y1="25" x2="70" y2="25"/>
+                            <line x1="30" y1="35" x2="65" y2="35"/>
+                            <line x1="30" y1="45" x2="70" y2="45"/>
+                            <line x1="30" y1="55" x2="60" y2="55"/>
+                            <line x1="30" y1="65" x2="70" y2="65"/>
+                            <line x1="30" y1="75" x2="55" y2="75"/>
+                            <path d="M60 70 L75 85 L80 80 L65 65 Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <span class="panel-number">II</span>
+                    <h2 class="panel-title">Opere Minori</h2>
+                    <p class="panel-description">
+                        La Vita Nova, il Convivio, il De vulgari eloquentia e altre opere 
+                        che rivelano la profondità intellettuale e poetica di Dante.
+                    </p>
+                    <button class="panel-cta">Esplora le Opere</button>
+                </div>
+            </article>
+
+            <!-- Pannello Divina Commedia -->
+            <article class="panel panel-commedia" tabindex="0" role="button" aria-label="Vai alla Divina Commedia">
+                <div class="panel-bg"></div>
+                <div class="panel-content">
+                    <div class="panel-icon">
+                        <svg viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="40"/>
+                            <circle cx="50" cy="50" r="28"/>
+                            <circle cx="50" cy="50" r="16"/>
+                            <circle cx="50" cy="50" r="5" fill="currentColor"/>
+                            <line x1="50" y1="10" x2="50" y2="22"/>
+                            <line x1="50" y1="78" x2="50" y2="90"/>
+                            <line x1="10" y1="50" x2="22" y2="50"/>
+                            <line x1="78" y1="50" x2="90" y2="50"/>
+                        </svg>
+                    </div>
+                    <span class="panel-number">III</span>
+                    <h2 class="panel-title">Divina Commedia</h2>
+                    <p class="panel-description">
+                        Il capolavoro immortale: un viaggio attraverso Inferno, Purgatorio 
+                        e Paradiso che ha definito la letteratura mondiale.
+                    </p>
+                    <button class="panel-cta">Inizia il Viaggio</button>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <!-- Quote Section -->
+    <section class="quote-section reveal" id="quote">
+        <div class="quote-content">
+            <blockquote class="quote-text">
+                "Considerate la vostra semenza:<br>
+                fatti non foste a viver come bruti,<br>
+                ma per seguir virtute e canoscenza."
+            </blockquote>
+            <cite class="quote-author">Dante Alighieri</cite>
+            <p class="quote-source">Inferno, Canto XXVI</p>
+        </div>
+    </section>
+
+    <!-- Biografia Section -->
+    <section class="biografia-section" id="biografia">
+        <div class="bio-cosmos">
+            <div class="bio-stars"></div>
+            <div class="bio-nebula"></div>
+        </div>
+
+        <header class="bio-header">
+            <div class="bio-header-ornament">
+                <span class="ornament-left">◆━━━</span>
+                <span class="ornament-center">VITA</span>
+                <span class="ornament-right">━━━◆</span>
+            </div>
+            <h2 class="bio-main-title">
+                <span class="title-line">La Vita di</span>
+                <span class="title-name">Dante Alighieri</span>
+            </h2>
+            <p class="bio-subtitle">Durante degli Alighieri · Firenze 1265 – Ravenna 1321</p>
+        </header>
+
+        <div class="timeline-container">
+            <div class="timeline-line">
+                <div class="timeline-progress" id="timelineProgress"></div>
+            </div>
+
+            <!-- 1265 -->
+            <article class="timeline-event" data-year="1265">
+                <div class="event-marker">
+                    <div class="marker-ring"></div>
+                    <div class="marker-dot"></div>
+                    <span class="marker-year">1265</span>
+                </div>
+                <div class="event-card">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 60 60">
+                            <circle cx="30" cy="20" r="12" fill="none" stroke="currentColor" stroke-width="2"/>
+                            <path d="M15 55 Q30 35 45 55" fill="none" stroke="currentColor" stroke-width="2"/>
+                            <path d="M25 18 L30 10 L35 18" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                        </svg>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-period">Maggio - Giugno 1265</span>
+                        <h3 class="card-title">Nascita a Firenze</h3>
+                        <div class="card-text">
+                            <p><strong>Durante degli Alighieri</strong> nasce a Firenze tra il 14 maggio e il 13 giugno 1265, sotto il segno dei Gemelli — costellazione che egli stesso celebrerà nel Paradiso. La famiglia appartiene alla piccola nobiltà cittadina, di parte guelfa.</p>
+                            <p>Il padre, <strong>Alighiero di Bellincione</strong>, è un cambiavalute di modeste fortune. La madre, <strong>Bella degli Abati</strong>, muore quando Dante ha circa cinque o sei anni, lasciando un vuoto che segnerà profondamente la sua sensibilità poetica.</p>
+                        </div>
+                        <div class="card-quote">
+                            <blockquote>"O glorïose stelle, o lume pregno / di gran virtù, dal quale io riconosco / tutto, qual che si sia, il mio ingegno"</blockquote>
+                            <cite>— Paradiso, XXII, 112-114</cite>
+                        </div>
+                    </div>
+                    <div class="card-image" style="--img-hue: 45deg;">
+                        <div class="image-frame">
+                            <div class="image-content firenze-antica"></div>
+                        </div>
+                        <span class="image-caption">Firenze nel XIII secolo</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 1274 -->
+            <article class="timeline-event" data-year="1274">
+                <div class="event-marker">
+                    <div class="marker-ring"></div>
+                    <div class="marker-dot"></div>
+                    <span class="marker-year">1274</span>
+                </div>
+                <div class="event-card featured">
+                    <div class="card-icon heart-icon">
+                        <svg viewBox="0 0 60 60">
+                            <path d="M30 50 C10 35 5 20 15 12 C22 6 30 12 30 20 C30 12 38 6 45 12 C55 20 50 35 30 50" fill="none" stroke="currentColor" stroke-width="2"/>
+                            <circle cx="30" cy="28" r="4" fill="currentColor" class="heart-pulse"/>
+                        </svg>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-period">1 Maggio 1274</span>
+                        <h3 class="card-title">L'Incontro con Beatrice</h3>
+                        <div class="card-text">
+                            <p>A nove anni, durante una festa di calendimaggio, Dante vede per la prima volta <strong>Beatrice Portinari</strong>, figlia del banchiere Folco Portinari. È un incontro destinato a trasformare non solo la sua vita, ma l'intera storia della letteratura.</p>
+                            <p>Beatrice, "la gloriosa donna de la mia mente", diventerà il centro gravitazionale di tutta la poesia dantesca: dalla <em>Vita Nova</em> alla <em>Divina Commedia</em>, ella rappresenta l'amore che eleva, purifica e conduce a Dio.</p>
+                            <p>Il secondo incontro avverrà nove anni dopo, nel 1283, quando Beatrice rivolge a Dante il suo saluto — momento che il poeta descrive come una rivelazione mistica.</p>
+                        </div>
+                        <div class="card-quote">
+                            <blockquote>"Apparve vestita di nobilissimo colore, umile e onesto, sanguigno, cinta e ornata a la guisa che a la sua giovanissima etade si convenia."</blockquote>
+                            <cite>— Vita Nova, II</cite>
+                        </div>
+                    </div>
+                    <div class="card-image" style="--img-hue: 340deg;">
+                        <div class="image-frame">
+                            <div class="image-content beatrice-incontro"></div>
+                        </div>
+                        <span class="image-caption">L'incontro con Beatrice</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 1280-1295 -->
+            <article class="timeline-event" data-year="1280">
+                <div class="event-marker">
+                    <div class="marker-ring"></div>
+                    <div class="marker-dot"></div>
+                    <span class="marker-year">1280-1295</span>
+                </div>
+                <div class="event-card">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 60 60">
+                            <rect x="10" y="15" width="40" height="35" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+                            <line x1="10" y1="25" x2="50" y2="25" stroke="currentColor" stroke-width="2"/>
+                            <line x1="18" y1="32" x2="42" y2="32" stroke="currentColor" stroke-width="1.5"/>
+                            <line x1="18" y1="38" x2="38" y2="38" stroke="currentColor" stroke-width="1.5"/>
+                            <line x1="18" y1="44" x2="40" y2="44" stroke="currentColor" stroke-width="1.5"/>
+                            <circle cx="30" cy="10" r="5" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                        </svg>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-period">1280 - 1295</span>
+                        <h3 class="card-title">Formazione Intellettuale</h3>
+                        <div class="card-text">
+                            <p>Dante riceve un'educazione completa secondo i canoni del tempo. Studia presso i Francescani di Santa Croce e i Domenicani di Santa Maria Novella, immergendosi nella filosofia scolastica, nella teologia e nelle arti liberali.</p>
+                            <p>Il maestro <strong>Brunetto Latini</strong>, uomo politico e intellettuale, lo introduce alla retorica e alla filosofia. A Bologna, Dante approfondisce gli studi di retorica e probabilmente entra in contatto con la tradizione poetica bolognese.</p>
+                            <p>Frequenta il circolo dello <strong>Stilnovo</strong>, stringendo amicizia con <strong>Guido Cavalcanti</strong> — che chiamerà "primo amico" — e con altri poeti come Lapo Gianni e Cino da Pistoia. Insieme, rivoluzionano la poesia d'amore italiana.</p>
+                        </div>
+                        <div class="card-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Maestri</span>
+                                <span class="detail-value">Brunetto Latini, Remigio de' Girolami</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Discipline</span>
+                                <span class="detail-value">Filosofia, Teologia, Retorica, Astronomia</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Lingue</span>
+                                <span class="detail-value">Latino, Volgare fiorentino, Provenzale</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 1289 -->
+            <article class="timeline-event" data-year="1289">
+                <div class="event-marker">
+                    <div class="marker-ring"></div>
+                    <div class="marker-dot"></div>
+                    <span class="marker-year">1289</span>
+                </div>
+                <div class="event-card">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 60 60">
+                            <path d="M30 5 L30 40" stroke="currentColor" stroke-width="3"/>
+                            <path d="M20 40 L30 55 L40 40" fill="none" stroke="currentColor" stroke-width="2"/>
+                            <path d="M22 15 L30 5 L38 15" fill="currentColor"/>
+                            <circle cx="30" cy="45" r="3" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-period">11 Giugno 1289</span>
+                        <h3 class="card-title">Battaglia di Campaldino</h3>
+                        <div class="card-text">
+                            <p>Dante partecipa come <strong>feditore a cavallo</strong> alla battaglia di Campaldino, dove i Guelfi fiorentini sconfiggono i Ghibellini aretini. È la sua prima esperienza diretta della guerra e della morte.</p>
+                            <p>In questa battaglia muore <strong>Buonconte da Montefeltro</strong>, che Dante incontrerà nel Purgatorio, e combatte <strong>Corso Donati</strong>, futuro nemico politico del poeta. L'esperienza bellica lascia tracce profonde nella Commedia, dove le descrizioni di violenza e conflitto rivelano una conoscenza diretta.</p>
+                        </div>
+                        <div class="card-quote">
+                            <blockquote>"Io fui al piè del suo monte, / e io nacqui in quel campo / là dove i Fiorentini Ghibellini fêr grande strazio"</blockquote>
+                            <cite>— Riferimento a Campaldino, Purgatorio V</cite>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 1290 -->
+            <article class="timeline-event" data-year="1290">
+                <div class="event-marker marker-dark">
+                    <div class="marker-ring"></div>
+                    <div class="marker-dot"></div>
+                    <span class="marker-year">1290</span>
+                </div>
+                <div class="event-card mourning">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 60 60">
+                            <circle cx="30" cy="25" r="15" fill="none" stroke="currentColor" stroke-width="2"/>
+                            <path d="M20 55 L30 35 L40 55" fill="none" stroke="currentColor" stroke-width="2"/>
+                            <line x1="30" y1="20" x2="30" y2="30" stroke="currentColor" stroke-width="2"/>
+                            <line x1="25" y1="25" x2="35" y2="25" stroke="currentColor" stroke-width="2"/>
+                            <path d="M22 22 Q30 15 38 22" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="2,2"/>
+                        </svg>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-period">8 Giugno 1290</span>
+                        <h3 class="card-title">La Morte di Beatrice</h3>
+                        <div class="card-text">
+                            <p>Beatrice Portinari muore a soli ventiquattro anni, probabilmente di parto. Per Dante è un lutto cosmico: "la regina de la gloria" ha lasciato il mondo terreno.</p>
+                            <p>Il poeta sprofonda in una crisi esistenziale e spirituale. Cerca consolazione nella filosofia — in particolare negli scritti di Boezio e Cicerone — e inizia a comporre la <strong>Vita Nova</strong>, il "libello" che raccoglie e commenta le rime dedicate a Beatrice.</p>
+                            <p>Alla fine della Vita Nova, Dante fa un voto solenne: scriverà di Beatrice "quello che mai non fue detto d'alcuna" — una promessa che si compirà nella Divina Commedia.</p>
+                        </div>
+                        <div class="card-quote">
+                            <blockquote>"Partissi de la sua bella persona / piena di grazia l'anima gentile, / ed èssi gloriosa in loco degno."</blockquote>
+                            <cite>— Vita Nova, XXXI</cite>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 1295 -->
+            <article class="timeline-event" data-year="1295">
+                <div class="event-marker">
+                    <div class="marker-ring"></div>
+                    <div class="marker-dot"></div>
+                    <span class="marker-year">1295</span>
+                </div>
+                <div class="event-card">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 60 60">
+                            <rect x="15" y="20" width="30" height="35" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
+                            <path d="M20 20 L20 10 L40 10 L40 20" fill="none" stroke="currentColor" stroke-width="2"/>
+                            <circle cx="30" cy="35" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                            <path d="M26 35 L29 38 L35 32" fill="none" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-period">1285 - 1300</span>
+                        <h3 class="card-title">Matrimonio e Ingresso in Politica</h3>
+                        <div class="card-text">
+                            <p>Intorno al 1285, Dante sposa <strong>Gemma Donati</strong>, secondo un accordo matrimoniale stipulato anni prima. Dal matrimonio nascono almeno tre figli: <strong>Jacopo</strong>, <strong>Pietro</strong> (entrambi futuri commentatori della Commedia) e <strong>Antonia</strong> (che prenderà i voti col nome di Beatrice).</p>
+                            <p>Nel 1295 Dante si iscrive all'<strong>Arte dei Medici e Speziali</strong> per poter partecipare alla vita politica fiorentina. Inizia così la sua carriera nelle istituzioni comunali, che lo porterà a ricoprire incarichi sempre più importanti.</p>
+                        </div>
+                        <div class="card-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Moglie</span>
+                                <span class="detail-value">Gemma di Manetto Donati</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Figli</span>
+                                <span class="detail-value">Jacopo, Pietro, Antonia (e forse Giovanni)</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Corporazione</span>
+                                <span class="detail-value">Arte dei Medici e Speziali</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 1300 -->
+            <article class="timeline-event" data-year="1300">
+                <div class="event-marker">
+                    <div class="marker-ring"></div>
+                    <div class="marker-dot"></div>
+                    <span class="marker-year">1300</span>
+                </div>
+                <div class="event-card">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 60 60">
+                            <polygon points="30,5 45,20 45,45 30,55 15,45 15,20" fill="none" stroke="currentColor" stroke-width="2"/>
+                            <circle cx="30" cy="30" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                            <path d="M30 22 L30 30 L36 30" fill="none" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-period">15 Giugno - 15 Agosto 1300</span>
+                        <h3 class="card-title">Priore di Firenze</h3>
+                        <div class="card-text">
+                            <p>Dante raggiunge l'apice della carriera politica: viene eletto tra i sei <strong>Priori delle Arti</strong>, la massima magistratura della Repubblica fiorentina. È il periodo più turbolento della politica cittadina.</p>
+                            <p>Il partito guelfo è ormai diviso in <strong>Bianchi</strong> (guidati dai Cerchi, più moderati verso i Ghibellini) e <strong>Neri</strong> (guidati dai Donati, intransigenti e legati al Papa). Dante si schiera con i Bianchi.</p>
+                            <p>Durante il priorato, approva l'esilio dei capi di entrambe le fazioni per riportare la pace — tra gli esiliati c'è anche l'amico <strong>Guido Cavalcanti</strong>, che morirà poco dopo. È una decisione che Dante rimpiangerà amaramente.</p>
+                        </div>
+                        <div class="card-quote">
+                            <blockquote>"Tutti li mali e li 'nconvenienti miei da li infausti comizi del mio priorato ebbero cagione e principio."</blockquote>
+                            <cite>— Lettera a un amico fiorentino</cite>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 1302 -->
+            <article class="timeline-event" data-year="1302">
+                <div class="event-marker marker-danger">
+                    <div class="marker-ring"></div>
+                    <div class="marker-dot"></div>
+                    <span class="marker-year">1302</span>
+                </div>
+                <div class="event-card exile">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 60 60">
+                            <path d="M10 50 L30 20 L50 50 Z" fill="none" stroke="currentColor" stroke-width="2"/>
+                            <line x1="30" y1="28" x2="30" y2="38" stroke="currentColor" stroke-width="3"/>
+                            <circle cx="30" cy="44" r="2" fill="currentColor"/>
+                            <path d="M5 50 L55 50" stroke="currentColor" stroke-width="1" stroke-dasharray="3,3"/>
+                        </svg>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-period">27 Gennaio 1302</span>
+                        <h3 class="card-title">L'Esilio da Firenze</h3>
+                        <div class="card-text">
+                            <p>Nel novembre 1301, Carlo di Valois entra a Firenze con le truppe francesi, consentendo ai Neri di prendere il potere. Dante, che si trova a Roma come ambasciatore presso Papa Bonifacio VIII, non tornerà mai più nella sua città.</p>
+                            <p>Il 27 gennaio 1302 viene condannato in contumacia per <strong>baratteria</strong> (corruzione), con una multa di 5.000 fiorini e l'interdizione perpetua dai pubblici uffici. Due mesi dopo, il 10 marzo, una seconda sentenza lo condanna al <strong>rogo</strong> se catturato sul territorio fiorentino.</p>
+                            <p>Iniziano i vent'anni di pellegrinaggio: Dante viaggerà per tutta l'Italia settentrionale e centrale, ospite di signori e corti, "salendo e scendendo per l'altrui scale".</p>
+                        </div>
+                        <div class="card-quote">
+                            <blockquote>"Tu lascerai ogne cosa diletta / più caramente; e questo è quello strale / che l'arco de lo essilio pria saetta."</blockquote>
+                            <cite>— Paradiso, XVII, 55-57</cite>
+                        </div>
+                        <div class="card-map">
+                            <div class="map-title">L'Itinerario dell'Esilio</div>
+                            <div class="map-locations">
+                                <span class="location">Arezzo</span>
+                                <span class="location-arrow">→</span>
+                                <span class="location">Forlì</span>
+                                <span class="location-arrow">→</span>
+                                <span class="location">Verona</span>
+                                <span class="location-arrow">→</span>
+                                <span class="location">Treviso</span>
+                                <span class="location-arrow">→</span>
+                                <span class="location">Padova</span>
+                                <span class="location-arrow">→</span>
+                                <span class="location">Lucca</span>
+                                <span class="location-arrow">→</span>
+                                <span class="location">Ravenna</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 1307-1321 -->
+            <article class="timeline-event" data-year="1307">
+                <div class="event-marker marker-divine">
+                    <div class="marker-ring"></div>
+                    <div class="marker-dot"></div>
+                    <span class="marker-year">1307-1321</span>
+                </div>
+                <div class="event-card masterpiece">
+                    <div class="card-icon commedia-icon">
+                        <svg viewBox="0 0 60 60">
+                            <circle cx="30" cy="30" r="25" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                            <circle cx="30" cy="30" r="18" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                            <circle cx="30" cy="30" r="11" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                            <circle cx="30" cy="30" r="4" fill="currentColor"/>
+                            <line x1="30" y1="5" x2="30" y2="12" stroke="currentColor" stroke-width="1.5"/>
+                            <line x1="30" y1="48" x2="30" y2="55" stroke="currentColor" stroke-width="1.5"/>
+                            <line x1="5" y1="30" x2="12" y2="30" stroke="currentColor" stroke-width="1.5"/>
+                            <line x1="48" y1="30" x2="55" y2="30" stroke="currentColor" stroke-width="1.5"/>
+                        </svg>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-period">1307 - 1321</span>
+                        <h3 class="card-title">La Divina Commedia</h3>
+                        <div class="card-text">
+                            <p>Durante l'esilio, Dante compone il suo capolavoro assoluto: la <strong>Commedia</strong> (l'aggettivo "Divina" sarà aggiunto da Boccaccio). Un poema in terzine di endecasillabi, diviso in tre cantiche: Inferno, Purgatorio, Paradiso.</p>
+                            <p>L'opera narra il viaggio ultramondano del poeta — ambientato nella Settimana Santa del 1300 — attraverso i tre regni dell'aldilà, guidato prima da <strong>Virgilio</strong> (la ragione umana) e poi da <strong>Beatrice</strong> (la teologia, la grazia divina).</p>
+                            <p>È un'enciclopedia del sapere medievale, una summa teologica in versi, un atto d'accusa politico, una dichiarazione d'amore immortale. È l'opera che fonda la lingua italiana.</p>
+                        </div>
+                        <div class="card-structure">
+                            <div class="structure-title">Struttura del Poema</div>
+                            <div class="structure-grid">
+                                <div class="structure-item inferno">
+                                    <span class="structure-name">INFERNO</span>
+                                    <span class="structure-canti">34 Canti</span>
+                                    <span class="structure-versi">4.720 versi</span>
+                                </div>
+                                <div class="structure-item purgatorio">
+                                    <span class="structure-name">PURGATORIO</span>
+                                    <span class="structure-canti">33 Canti</span>
+                                    <span class="structure-versi">4.755 versi</span>
+                                </div>
+                                <div class="structure-item paradiso">
+                                    <span class="structure-name">PARADISO</span>
+                                    <span class="structure-canti">33 Canti</span>
+                                    <span class="structure-versi">4.758 versi</span>
+                                </div>
+                            </div>
+                            <div class="structure-total">
+                                <strong>Totale:</strong> 100 Canti · 14.233 versi · circa 100.000 parole
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 1310-1318 -->
+            <article class="timeline-event" data-year="1310">
+                <div class="event-marker">
+                    <div class="marker-ring"></div>
+                    <div class="marker-dot"></div>
+                    <span class="marker-year">1310-1318</span>
+                </div>
+                <div class="event-card">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 60 60">
+                            <path d="M30 10 L50 25 L50 50 L10 50 L10 25 Z" fill="none" stroke="currentColor" stroke-width="2"/>
+                            <rect x="22" y="35" width="16" height="15" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                            <line x1="30" y1="35" x2="30" y2="50" stroke="currentColor" stroke-width="1.5"/>
+                            <path d="M15 28 L30 18 L45 28" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                        </svg>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-period">1310 - 1318</span>
+                        <h3 class="card-title">Speranze e Delusioni Imperiali</h3>
+                        <div class="card-text">
+                            <p>Nel 1310 <strong>Arrigo VII di Lussemburgo</strong> scende in Italia per restaurare l'autorità imperiale. Dante vede in lui il "messo di Dio" che riporterà ordine e giustizia nella penisola. Scrive lettere infuocate ai principi italiani e ai Fiorentini, esortandoli ad accogliere l'imperatore.</p>
+                            <p>Ma Arrigo muore improvvisamente nel 1313, e con lui muore il sogno politico dantesco. Dante compone in questi anni il <strong>De Monarchia</strong>, trattato in cui teorizza la necessaria separazione tra potere temporale (Impero) e spirituale (Chiesa).</p>
+                            <p>Rifiuta nel 1315 un'amnistia che richiederebbe l'ammissione di colpa: "Non è questa la via del ritorno alla patria", scrive sdegnato.</p>
+                        </div>
+                        <div class="card-quote">
+                            <blockquote>"Se per altra via tornerò nella mia patria, quella accetterò con tutto l'animo; ma se a Firenze non si entra per via onorevole, a Firenze io non entrerò mai."</blockquote>
+                            <cite>— Epistola XII, 1315</cite>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 1321 -->
+            <article class="timeline-event" data-year="1321">
+                <div class="event-marker marker-final">
+                    <div class="marker-ring"></div>
+                    <div class="marker-dot"></div>
+                    <span class="marker-year">1321</span>
+                </div>
+                <div class="event-card final">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 60 60">
+                            <circle cx="30" cy="30" r="20" fill="none" stroke="currentColor" stroke-width="2"/>
+                            <path d="M30 10 L30 30 L45 30" fill="none" stroke="currentColor" stroke-width="2"/>
+                            <circle cx="30" cy="30" r="3" fill="currentColor"/>
+                            <path d="M20 45 L30 55 L40 45" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2,2"/>
+                        </svg>
+                    </div>
+                    <div class="card-content">
+                        <span class="card-period">13/14 Settembre 1321</span>
+                        <h3 class="card-title">Ravenna: Morte e Immortalità</h3>
+                        <div class="card-text">
+                            <p>Dal 1318 Dante è ospite a Ravenna di <strong>Guido Novello da Polenta</strong>, signore della città. Qui trascorre gli ultimi anni in relativa serenità, circondato dai figli e da un cenacolo di ammiratori. Completa finalmente il Paradiso.</p>
+                            <p>Nell'estate del 1321 compie un'ambasceria a Venezia per conto di Guido. Durante il viaggio di ritorno contrae la malaria nelle paludi ravennati. Muore nella notte tra il <strong>13 e il 14 settembre 1321</strong>, a cinquantasei anni.</p>
+                            <p>Viene sepolto nella chiesa di San Francesco a Ravenna, dove il suo corpo riposa ancora oggi — nonostante i ripetuti tentativi di Firenze di riportarlo in patria. Solo nella morte, il poeta ha trovato la pace che la vita gli aveva negato.</p>
+                        </div>
+                        <div class="card-epitaph">
+                            <div class="epitaph-text">
+                                <p class="epitaph-latin">"Iura Monarchiae, Superos Phlægetonta lacusque / Lustrando cecini, voluerunt fata quousque. / Sed quia pars cessit melioribus hospita castris / Auctoremque suum petiit felicior astris, / Hic claudor Danthes patriis extorris ab oris / Quem genuit parvi Florentia mater amoris."</p>
+                                <p class="epitaph-translation">"I diritti della Monarchia, il cielo e l'inferno / cantai visitando, fin dove vollero i fati. / Ma poiché l'anima andò ospite in luoghi migliori / e più felice cercò il suo Autore fra gli astri, / qui sono chiuso io, Dante, esule dalla patria, / cui generò Firenze, madre di poco amore."</p>
+                            </div>
+                            <cite>— Epitaffio sulla tomba di Dante (attribuito a Bernardo Canaccio)</cite>
+                        </div>
+                    </div>
+                    <div class="card-image" style="--img-hue: 220deg;">
+                        <div class="image-frame">
+                            <div class="image-content tomba-dante"></div>
+                        </div>
+                        <span class="image-caption">Tomba di Dante a Ravenna</span>
+                    </div>
+                </div>
+            </article>
+        </div>
+
+        <!-- Legacy Section -->
+        <div class="legacy-section">
+            <div class="legacy-header">
+                <h3 class="legacy-title">L'Eredità Immortale</h3>
+                <p class="legacy-subtitle">Sette secoli di influenza sulla cultura mondiale</p>
+            </div>
+            <div class="legacy-grid">
+                <div class="legacy-card">
+                    <div class="legacy-icon">
+                        <svg viewBox="0 0 50 50" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M25 5 L30 20 L45 20 L33 30 L38 45 L25 35 L12 45 L17 30 L5 20 L20 20 Z"/>
+                        </svg>
+                    </div>
+                    <h4>Padre della Lingua Italiana</h4>
+                    <p>La Commedia stabilisce il volgare fiorentino come lingua letteraria italiana, gettando le basi dell'italiano moderno.</p>
+                </div>
+                <div class="legacy-card">
+                    <div class="legacy-icon">
+                        <svg viewBox="0 0 50 50" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="25" cy="25" r="18"/>
+                            <path d="M25 10 L25 25 L35 30"/>
+                        </svg>
+                    </div>
+                    <h4>Influenza Universale</h4>
+                    <p>Da Boccaccio a Borges, da Botticelli a Rodin, da Liszt a Lana Del Rey: l'opera dantesca ispira ogni arte e ogni epoca.</p>
+                </div>
+                <div class="legacy-card">
+                    <div class="legacy-icon">
+                        <svg viewBox="0 0 50 50" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="10" y="5" width="30" height="40" rx="2"/>
+                            <line x1="15" y1="15" x2="35" y2="15"/>
+                            <line x1="15" y1="22" x2="35" y2="22"/>
+                            <line x1="15" y1="29" x2="30" y2="29"/>
+                        </svg>
+                    </div>
+                    <h4>Opera Più Tradotta</h4>
+                    <p>La Divina Commedia è tradotta in oltre 60 lingue, dal giapponese allo swahili, ed è oggetto di studio in tutto il mondo.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-ornament"></div>
+        <p class="footer-text">DANTE ALIGHIERI · FIRENZE MCCLXV – RAVENNA MCCCXXI</p>
+        <p class="footer-date">L'amor che move il sole e l'altre stelle</p>
+    </footer>
+
+    <script>
+        (function() {
+            // LOADER
+            function hideLoader() {
+                var loader = document.getElementById('loader');
+                if (loader) {
+                    loader.classList.add('hidden');
+                }
+            }
+
+            if (document.readyState === 'complete') {
+                setTimeout(hideLoader, 1500);
+            } else {
+                window.addEventListener('load', function() {
+                    setTimeout(hideLoader, 1500);
+                });
+            }
+
+            // HEADER SCROLL
+            var header = document.getElementById('header');
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 100) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+
+            // PARTICLES
+            var particlesContainer = document.getElementById('particles');
+            if (particlesContainer) {
+                var colors = ['#C9A227', '#E8D5A3', '#DAA520', '#FFD700'];
+                for (var i = 0; i < 50; i++) {
+                    var particle = document.createElement('div');
+                    particle.className = 'particle';
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.animationDelay = Math.random() * 8 + 's';
+                    particle.style.animationDuration = (5 + Math.random() * 5) + 's';
+                    particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    var size = (2 + Math.random() * 4) + 'px';
+                    particle.style.width = size;
+                    particle.style.height = size;
+                    particlesContainer.appendChild(particle);
+                }
+            }
+
+            // REVEAL ANIMATIONS
+            var revealElements = document.querySelectorAll('.reveal');
+            var revealObserver = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+            revealElements.forEach(function(el) {
+                revealObserver.observe(el);
+            });
+
+            // SMOOTH SCROLL
+            document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    var target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+
+            // HERO PARALLAX
+            var heroContent = document.querySelector('.hero-content');
+            window.addEventListener('scroll', function() {
+                var scrolled = window.pageYOffset;
+                if (heroContent && scrolled < window.innerHeight) {
+                    heroContent.style.transform = 'translateY(' + (scrolled * 0.3) + 'px)';
+                    heroContent.style.opacity = 1 - (scrolled / window.innerHeight);
+                }
+            });
+
+            // BIOGRAFIA OPEN/CLOSE
+            var openBioBtn = document.getElementById('openBioBtn');
+            var bioCloseBtn = document.getElementById('bioCloseBtn');
+            var biografiaSection = document.getElementById('biografia');
+            var timelineObserver = null;
+
+            function updateTimelineProgress() {
+                var timelineContainer = document.querySelector('.timeline-container');
+                var progressBar = document.getElementById('timelineProgress');
+                if (!timelineContainer || !progressBar) return;
+
+                var containerRect = timelineContainer.getBoundingClientRect();
+                var windowHeight = window.innerHeight;
+                var scrollProgress = Math.min(
+                    Math.max((windowHeight - containerRect.top) / (containerRect.height + windowHeight), 0),
+                    1
+                );
+                progressBar.style.height = (scrollProgress * 100) + '%';
+            }
+
+            function initBioAnimations() {
+                var timelineEvents = document.querySelectorAll('.timeline-event');
+
+                if (timelineObserver) {
+                    timelineObserver.disconnect();
+                }
+
+                timelineObserver = new IntersectionObserver(function(entries) {
+                    entries.forEach(function(entry) {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            updateTimelineProgress();
+                        }
+                    });
+                }, { threshold: 0.2, rootMargin: '0px 0px -100px 0px' });
+
+                timelineEvents.forEach(function(event) {
+                    timelineObserver.observe(event);
+                });
+            }
+
+            if (openBioBtn) {
+                openBioBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    biografiaSection.classList.add('open');
+                    bioCloseBtn.classList.add('visible');
+
+                    setTimeout(function() {
+                        biografiaSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        initBioAnimations();
+                    }, 100);
+                });
+            }
+
+            if (bioCloseBtn) {
+                bioCloseBtn.addEventListener('click', function() {
+                    biografiaSection.classList.remove('open');
+                    bioCloseBtn.classList.remove('visible');
+
+                    var timelineEvents = document.querySelectorAll('.timeline-event');
+                    timelineEvents.forEach(function(event) {
+                        event.classList.remove('visible');
+                    });
+
+                    document.getElementById('sections').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                });
+            }
+
+            window.addEventListener('scroll', function() {
+                if (biografiaSection.classList.contains('open')) {
+                    updateTimelineProgress();
+                }
+            });
+
+            // KEYBOARD NAVIGATION FOR PANELS
+            var panels = document.querySelectorAll('.panel');
+            panels.forEach(function(panel) {
+                panel.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        var button = panel.querySelector('.panel-cta');
+                        if (button) button.click();
+                    }
+                });
+            });
+
+            // CONSOLE EASTER EGG
+            console.log('%c◆ DANTE ALIGHIERI ◆', 'color: #C9A227; font-size: 24px; font-weight: bold; font-family: serif;');
+            console.log('%c"Lasciate ogne speranza, voi ch\'intrate"', 'color: #8B0000; font-style: italic; font-size: 14px;');
+        })();
+    </script>
+</body>
+</html>
